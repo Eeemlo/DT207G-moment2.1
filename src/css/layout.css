@@ -44,7 +44,8 @@ header {
     max-width: 800px;
 }
 
-.job {
+.job,
+.about {
    margin: 25px 10px;
    padding-left: 15px;
    border-left: 5px solid;
@@ -54,6 +55,11 @@ header {
      rgb(255, 0, 132), 
      rgba(97, 36, 251, 0)
    ) 1 100%;
+}
+
+.about {
+  margin-left: 15%;
+  max-width: 800px;
 }
 
 #myBtn {
@@ -245,7 +251,29 @@ header {
   footer {
     display: flex;
     justify-content:space-around;
-    padding: 10px 0;
+    padding: 10px 10px 10px 10px;
+  }
+
+  footer p {
+    font-size: 0.7em;
+  }
+
+  a {
+    color: #fff;
+    background-color: #000;
+    padding: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0 5px;
+    position: relative;
+    bottom: 0;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    transition: 0.5s ease;
+  }
+
+  a:hover {
+    background-color: #636363;
   }
 
   @keyframes anime {
@@ -268,7 +296,8 @@ header {
       margin: 50px 4px 50px 0;
     }   
 
-    .joblist {
+    .joblist,
+    .about {
       margin-left: 5%;
   }
   }
@@ -293,6 +322,10 @@ header {
 
     h2 {
       font-size: 1.1em;
+    }
+
+    footer p {
+      display: none;
     }
   }
 
