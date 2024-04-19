@@ -2,6 +2,7 @@ let url = "https://dt207g-moment2-lgk1.onrender.com/api/work_experience";
 
 var modal = document.querySelector("#myModal"); // Container för popup
 
+// Funktion för att hämta data från API
 async function getData() {
     const response = await fetch(url);
     const data = await response.json();
@@ -13,9 +14,10 @@ async function getData() {
 
 getData();
 
+// Funktion för att skriva ut data till DOM
 async function iterateData(data) {
     const joblistContainer = document.querySelector(".joblist");
-    
+
     let jobExperience = [];
     if (data.rows) {
         jobExperience = data.rows; // Om data.rows är definierad, använd det
@@ -40,7 +42,7 @@ async function iterateData(data) {
         <h3>${job.company_name}</h3>
         <h4>${shortenedStartdate} - ${shortenedEnddate}</h4>
         <p>${job.description}</p>
-        <button class="editBtn" data-id="${job.id}">Redigera</button><button class="deleteBtn" data-id="${job.id}">Radera</button>
+        <button class="deleteBtn" data-id="${job.id}">Radera</button>
         </div></div>
         `;
         } else {
@@ -48,7 +50,7 @@ async function iterateData(data) {
             <h3>${job.company_name}</h3>
             <h4>${shortenedStartdate} - Pågående</h4>
             <p>${job.description}</p>
-            <button class="editBtn" data-id="${job.id}">Redigera</button><button class="deleteBtn" data-id="${job.id}">Radera</button></div></div>`;
+            <button class="deleteBtn" data-id="${job.id}">Radera</button></div></div>`;
         }
     });
 
@@ -72,12 +74,6 @@ async function iterateData(data) {
     });
 }
 
-async function openEditModal(jobId) {
-    const response = await fetch(url + "/" + jobId);
-    const job = await response.json();
-    // Här öppnar du modalfönstret med data för det specifika jobbet och fyller i fälten med den hämtade informationen
-}
-
 // Hämta formulärfältens element
 const form = document.querySelector(".form");
 const companyNameInput = document.querySelector("#employer");
@@ -88,7 +84,7 @@ const enddateInput = document.querySelector("#enddate");
 const descriptionInput = document.querySelector("#description");
 const ongoingCheckbox = document.querySelector("#ongoing");
 
-// Eventlyssnare vid submit av formulär
+// Eventlyssnare vid submit av formulär som skapar objekt och skickar till API
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -132,51 +128,23 @@ form.addEventListener("submit", async (event) => {
 
         iterateData(data);
     } catch (error) {
-        console.error("Error:", error); // Logga eventuella fel som uppstår
+        console.error("Error:", error); 
     }
 
     companyNameInput.value = "";
-jobtitleInput.value = "";
-locationInput.value = "";
-startdateInput.value = "";
-enddateInput.value = "";
-descriptionInput.value = "";
+    jobtitleInput.value = "";
+    locationInput.value = "";
+    startdateInput.value = "";
+    enddateInput.value = "";
+    descriptionInput.value = "";
 
-modal.style.display = "none";
-
+    modal.style.display = "none";
 });
 
-async function updateJob(
-    id,
-    companyName,
-    jobtitle,
-    location,
-    startdate,
-    enddate,
-    description
-) {
-    let workExperience = {
-        company_name: companyName,
-        job_title: jobtitle,
-        location: location,
-        startdate: startdate,
-        enddate: enddate,
-        description: description,
-    };
-
-    const response = await fetch(url + "/" + id, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(workExperience),
-    });
-
-    const data = await response.json();
-    console.log(data);
-}
-
+// Funktion för att radera jobb från API
 async function deleteJob(id, jobElement) {
+
+    // Skicka DELETE-förfrågan till API:et med objektets id
     const response = await fetch(url + "/" + id, {
         method: "DELETE",
         headers: {
@@ -187,8 +155,8 @@ async function deleteJob(id, jobElement) {
     const data = await response.json();
     console.log(data);
 
-       // Ta bort det aktuella jobberfarenhetsobjektet från DOM
-       jobElement.parentNode.removeChild(jobElement);
+    // Ta bort det aktuella jobberfarenhetsobjektet från DOM
+    jobElement.parentNode.removeChild(jobElement);
 }
 
 // Ladda in DOM innan JS körs
