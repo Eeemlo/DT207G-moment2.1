@@ -1,4 +1,6 @@
-let url = "http://127.0.0.1:3000/api/work_experience";
+let url = "https://dt207g-moment2-lgk1.onrender.com/api/work_experience";
+
+var modal = document.querySelector("#myModal"); // Container för popup
 
 async function getData() {
     const response = await fetch(url);
@@ -132,6 +134,16 @@ form.addEventListener("submit", async (event) => {
     } catch (error) {
         console.error("Error:", error); // Logga eventuella fel som uppstår
     }
+
+    companyNameInput.value = "";
+jobtitleInput.value = "";
+locationInput.value = "";
+startdateInput.value = "";
+enddateInput.value = "";
+descriptionInput.value = "";
+
+modal.style.display = "none";
+
 });
 
 async function updateJob(
@@ -181,13 +193,12 @@ async function deleteJob(id, jobElement) {
 
 // Ladda in DOM innan JS körs
 document.addEventListener("DOMContentLoaded", function () {
-    var modal = document.querySelector("#myModal"); // Container för popup
     var btn = document.querySelector("#myBtn"); // Knapp för att öppna popup
     var closeBtn = document.querySelector(".close"); // Kryss för att stänga popup
 
     // Kontrollera att modal, btn och span har validerats innan de används
     if (modal && btn && closeBtn) {
-        // WÖppna popup när användare trycker på knappen för "lägg till kurs"
+        // WÖppna popup när användare trycker på knappen för "lägg till jobb"
         btn.onclick = function () {
             modal.style.display = "block";
         };
