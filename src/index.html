@@ -43,16 +43,20 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <form class="form" method="post">
-                <label for="employer">Arbetsgivare:</label>
-                <input type="text" id="employer" name="employer">
-                <label for="position">Roll:</label>
-                <input type="text" id="position" name="position">
+                <label for="company">Arbetsgivare:</label>
+                <input type="text" id="company" name="company">
+                <span id="companyError"></span>
+                <label for="jobtitle">Roll:</label>
+                <input type="text" id="jobtitle" name="jobtitle">
+                <span id="jobtitleError"></span>
                 <label for="location">Ort:</label>
                 <input type="text" id="location" name="location">
+                <span id="locationError"></span>
                 <span class="fromto">
                     <span>
                         <label for="startdate">Startdatum:</label>
                         <input type="date" id="startdate" name="startdate">
+                        <span id="startdateError"></span>
                     </span><span>
                         <label for="enddate">Slutdatum:</label>
                         <input type="date" id="enddate" name="enddate">

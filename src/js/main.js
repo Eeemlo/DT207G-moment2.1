@@ -1,4 +1,4 @@
-let url = "https://dt207g-moment2-lgk1.onrender.com/api/work_experience";
+let url = "http://localhost:3001/jobs";
 
 var modal = document.querySelector("#myModal"); // Container för popup
 
@@ -18,14 +18,7 @@ getData();
 async function iterateData(data) {
     const joblistContainer = document.querySelector(".joblist");
 
-    let jobExperience = [];
-    if (data.rows) {
-        jobExperience = data.rows; // Om data.rows är definierad, använd det
-    } else if (data.workExperience) {
-        jobExperience = [data.workExperience]; // Om data.workExperience är definierat, lägg till det i en array
-    }
-
-    jobExperience.forEach((job) => {
+    data.forEach((job) => {
         // Kontrollera om startdate är mer än 10 tecknen
         const shortenedStartdate =
             job.startdate.length > 10
@@ -38,35 +31,26 @@ async function iterateData(data) {
                 : job.enddate;
 
         if (job.enddate != null) {
-            joblistContainer.innerHTML += `<div class="job"><div><h3>${job.job_title} @ </h3>
-        <h3>${job.company_name}</h3>
+            joblistContainer.innerHTML += `<div class="job"><div><h3>${job.jobtitle} @ </h3>
+        <h3>${job.company}</h3>
         <h4>${shortenedStartdate} - ${shortenedEnddate}</h4>
         <p>${job.description}</p>
-        <button class="deleteBtn" data-id="${job.id}">Radera</button>
+        <button class="deleteBtn" data-id="${job._id}">Radera</button>
         </div></div>
         `;
         } else {
-            joblistContainer.innerHTML += `<div class="job"><div><h3>${job.job_title} @ </h3>
-            <h3>${job.company_name}</h3>
+            joblistContainer.innerHTML += `<div class="job"><div><h3>${job.jobtitle} @ </h3>
+            <h3>${job.company}</h3>
             <h4>${shortenedStartdate} - Pågående</h4>
             <p>${job.description}</p>
-            <button class="deleteBtn" data-id="${job.id}">Radera</button></div></div>`;
+            <button class="deleteBtn" data-id="${job._id}">Radera</button></div></div>`;
         }
-    });
-
-    // Lägg till händelselyssnare för redigeringsknappar
-    const editBtns = document.querySelectorAll(".editBtn");
-    editBtns.forEach((editBtn) => {
-        editBtn.addEventListener("click", (e) => {
-            const jobId = e.target.getAttribute("data-id");
-            openEditModal(jobId);
-        });
     });
 
     // Lägg till händelselyssnare för raderaknappar
     const deleteBtns = document.querySelectorAll(".deleteBtn");
     deleteBtns.forEach((deleteBtn) => {
-        deleteBtn.addEventListener("click", (e) => {
+        deleteBtn.addEventListener("click", async (e) => {
             const jobId = e.target.getAttribute("data-id");
             const jobElement = e.target.closest(".job");
             deleteJob(jobId, jobElement);
@@ -76,8 +60,8 @@ async function iterateData(data) {
 
 // Hämta formulärfältens element
 const form = document.querySelector(".form");
-const companyNameInput = document.querySelector("#employer");
-const jobtitleInput = document.querySelector("#position");
+const companyNameInput = document.querySelector("#company");
+const jobtitleInput = document.querySelector("#jobtitle");
 const locationInput = document.querySelector("#location");
 const startdateInput = document.querySelector("#startdate");
 const enddateInput = document.querySelector("#enddate");
@@ -98,8 +82,8 @@ form.addEventListener("submit", async (event) => {
 
     // Skapa en payload baserat på formulärvärdena
     const workExperience = {
-        company_name: companyName,
-        job_title: jobtitle,
+        company: companyName,
+        jobtitle: jobtitle,
         location: location,
         startdate: startdate,
         enddate: enddate,
@@ -111,6 +95,7 @@ form.addEventListener("submit", async (event) => {
     // Om "Pågående" är markerad, sätt enddate till null
     if (ongoingCheckbox.checked) {
         workExperience.enddate = null;
+        ongoingCheckbox.checked = false;
     }
 
     try {
@@ -126,9 +111,9 @@ form.addEventListener("submit", async (event) => {
         const data = await response.json();
         console.log(data);
 
-        iterateData(data);
+        iterateData([data]);
     } catch (error) {
-        console.error("Error:", error); 
+        console.error("Error:", error);
     }
 
     companyNameInput.value = "";
@@ -143,7 +128,6 @@ form.addEventListener("submit", async (event) => {
 
 // Funktion för att radera jobb från API
 async function deleteJob(id, jobElement) {
-
     // Skicka DELETE-förfrågan till API:et med objektets id
     const response = await fetch(url + "/" + id, {
         method: "DELETE",
@@ -152,8 +136,10 @@ async function deleteJob(id, jobElement) {
         },
     });
 
-    const data = await response.json();
-    console.log(data);
+    if (!response.ok) {
+        console.error("Unable to delete job");
+        return;
+    }
 
     // Ta bort det aktuella jobberfarenhetsobjektet från DOM
     jobElement.parentNode.removeChild(jobElement);
@@ -161,8 +147,15 @@ async function deleteJob(id, jobElement) {
 
 // Ladda in DOM innan JS körs
 document.addEventListener("DOMContentLoaded", function () {
-    var btn = document.querySelector("#myBtn"); // Knapp för att öppna popup
-    var closeBtn = document.querySelector(".close"); // Kryss för att stänga popup
+    let btn = document.querySelector("#myBtn"); // Knapp för att öppna popup
+    let closeBtn = document.querySelector(".close"); // Kryss för att stänga popup
+    
+    // Hämta formulärfältens felmeddelande-element
+    const companyError = document.querySelector("#companyError");
+    const jobtitleError = document.querySelector("#jobtitleError");
+    const locationError = document.querySelector("#locationError");
+    const startdateError = document.querySelector("#startdateError");
+    const submitBtn = document.querySelector(".button");
 
     // Kontrollera att modal, btn och span har validerats innan de används
     if (modal && btn && closeBtn) {
