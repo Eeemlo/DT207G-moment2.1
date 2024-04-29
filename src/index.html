@@ -43,28 +43,28 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <form class="form" method="post">
-                <label for="company">Arbetsgivare:</label>
-                <input type="text" id="company" name="company">
-                <span id="companyError"></span>
-                <label for="jobtitle">Roll:</label>
-                <input type="text" id="jobtitle" name="jobtitle">
-                <span id="jobtitleError"></span>
-                <label for="location">Ort:</label>
+                <label for="company">Arbetsgivare</label>
+                <input type="text" id="company" name="company" required>
+                <span id="companyError" class="errorMsg"></span>
+                <label for="jobtitle">Roll</label>
+                <input type="text" id="jobtitle" name="jobtitle" required>
+                <span id="jobtitleError" class="errorMsg"></span>
+                <label for="location">Ort</label required>
                 <input type="text" id="location" name="location">
-                <span id="locationError"></span>
+                <span id="locationError" class="errorMsg"></span>
                 <span class="fromto">
                     <span>
-                        <label for="startdate">Startdatum:</label>
-                        <input type="date" id="startdate" name="startdate">
-                        <span id="startdateError"></span>
+                        <label for="startdate">Startdatum</label>
+                        <input type="date" id="startdate" name="startdate" required>
                     </span><span>
-                        <label for="enddate">Slutdatum:</label>
+                        <label for="enddate">Slutdatum</label>
                         <input type="date" id="enddate" name="enddate">
                     </span><span>
                         <input type="checkbox" id="ongoing" name="ongoing">
                         <label for="ongoing">Pågående</label></span>
                 </span>
-                <label for="description">Beskrivning:</label>
+                <span id="startdateError" class="errorMsg"></span>
+                <label for="description">Beskrivning</label>
                 <textarea id="description" name="description"></textarea>
                 <input type="submit" class="button" value="Spara">
             </form>

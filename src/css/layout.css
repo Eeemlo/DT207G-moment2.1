@@ -239,6 +239,14 @@ select {
   background-color: rgb(197, 3, 103);
 }
 
+.errorMsg {
+  font-size: 0.7em;
+  color: red;
+  font-weight: 600;
+  line-height: 0;
+  margin: -5px 0 15px;
+}
+
 /* The Close Button */
 .close {
   color: #aaaaaa;
